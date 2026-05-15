@@ -148,7 +148,7 @@ export default function RegistrationFunnelSection() {
   }
 
   return (
-    <SectionWrapper id="registrierung" className="bg-gradient-to-b from-brand-surface to-white">
+    <SectionWrapper id="pilot" className="bg-gradient-to-b from-brand-surface to-white">
       <motion.div
         variants={fadeInUp}
         initial="initial"

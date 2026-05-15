@@ -73,6 +73,7 @@ export default function GuestPageClient({ property, blocks, photos }: Props) {
             src={photoUrl}
             alt={property.name}
             className="w-full h-48 sm:h-64 object-cover"
+            onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
           />
         ) : (
           <div className="w-full h-32 bg-gradient-to-br from-brand-navy to-brand-sky" />

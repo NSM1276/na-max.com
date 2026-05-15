@@ -185,6 +185,11 @@ function BlockItem({
   async function handleSave() {
     setSaving(true)
     if (block) {
+      // Optimistic: update immediately
+      const optimistic = { ...block, ...form } as ContentBlock
+      onSave(optimistic)
+      showToast('Gespeichert')
+      setExpanded(false)
       const { data, error } = await supabase
         .from('content_blocks')
         .update(form)
@@ -192,9 +197,13 @@ function BlockItem({
         .select()
         .single()
       setSaving(false)
-      if (error) { showToast('Fehler beim Speichern'); return }
-      onSave(data as ContentBlock)
-      showToast('Gespeichert')
+      if (error) {
+        onSave(block) // revert
+        showToast('Fehler beim Speichern')
+        setExpanded(true)
+      } else {
+        onSave(data as ContentBlock)
+      }
     } else {
       const { data, error } = await supabase
         .from('content_blocks')
@@ -212,12 +221,15 @@ function BlockItem({
   async function handleDelete() {
     if (!block) return
     setDeleting(true)
-    const { error } = await supabase.from('content_blocks').delete().eq('id', block.id)
-    setDeleting(false)
-    if (error) { showToast('Fehler beim Löschen'); return }
+    // Optimistic: remove immediately
     onDelete(block.id)
     setExpanded(false)
-    showToast('Gelöscht')
+    const { error } = await supabase.from('content_blocks').delete().eq('id', block.id)
+    setDeleting(false)
+    if (error) {
+      onSave(block) // revert — put it back
+      showToast('Fehler beim Löschen')
+    }
   }
 
   return (
@@ -295,7 +307,7 @@ function BlockItem({
               />
             </div>
           </div>
-          <div className="flex items-center gap-3 pt-1">
+          <div className="flex items-center gap-3 pt-1" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
             <button
               onClick={handleSave}
               disabled={saving}
@@ -441,6 +453,7 @@ function FotosTab({
               src={getPublicUrl(photo.storage_path)}
               alt="Hotel Foto"
               className="w-full h-full object-cover"
+              onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
             />
             <div className="absolute inset-0 bg-brand-navy/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
               <button

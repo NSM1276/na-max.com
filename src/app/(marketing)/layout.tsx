@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import MobileStickyCtaBar from '@/components/layout/MobileStickyCtaBar'
+import WhatsAppButton from '@/components/layout/WhatsAppButton'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://na-max.com'),
@@ -41,6 +42,7 @@ export default function MarketingLayout({
       <main>{children}</main>
       <Footer />
       <MobileStickyCtaBar />
+      <WhatsAppButton />
     </>
   )
 }

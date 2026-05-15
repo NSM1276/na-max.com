@@ -381,7 +381,6 @@ function GridBG({ time }: { time: number }) {
 // ─── Main inner ───────────────────────────────────────────────────────────────
 function NaMaxVideoInner() {
   const time = useTime()
-  const DURATION = 12
 
   // Local time per scene
   const t1 = clamp(time, 0, 4)

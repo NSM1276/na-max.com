@@ -3,6 +3,7 @@ import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import MobileStickyCtaBar from '@/components/layout/MobileStickyCtaBar'
 import WhatsAppButton from '@/components/layout/WhatsAppButton'
+import { LanguageProvider } from '@/lib/i18n'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://na-max.com'),
@@ -37,12 +38,12 @@ export default function MarketingLayout({
   children: React.ReactNode
 }) {
   return (
-    <>
+    <LanguageProvider>
       <Navbar />
       <main>{children}</main>
       <Footer />
       <MobileStickyCtaBar />
       <WhatsAppButton />
-    </>
+    </LanguageProvider>
   )
 }

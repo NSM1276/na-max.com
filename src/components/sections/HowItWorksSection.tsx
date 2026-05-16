@@ -2,10 +2,11 @@
 
 import { motion } from 'framer-motion'
 import SectionWrapper from '@/components/ui/SectionWrapper'
-import { STEPS } from '@/lib/constants'
+import { useContent } from '@/lib/i18n'
 import { fadeInUp, transition, viewportOptions } from '@/lib/motion'
 
 export default function HowItWorksSection() {
+  const { STEPS, UI } = useContent()
   return (
     <SectionWrapper id="how-it-works" className="bg-brand-surface">
       <motion.div
@@ -17,13 +18,13 @@ export default function HowItWorksSection() {
         className="text-center mb-14"
       >
         <p className="text-xs font-semibold text-brand-sky uppercase tracking-widest mb-3">
-          Der Ablauf
+          {UI.howItWorks.kicker}
         </p>
         <h2 className="text-3xl sm:text-4xl font-bold text-brand-navy text-balance">
-          So einfach geht&apos;s
+          {UI.howItWorks.headline}
         </h2>
         <p className="mt-3 text-brand-slate max-w-xl mx-auto">
-          Vier Schritte — vom QR-Code zur erledigten Gästeanfrage.
+          {UI.howItWorks.sub}
         </p>
       </motion.div>
 
@@ -65,7 +66,7 @@ export default function HowItWorksSection() {
         className="mt-14 text-center"
       >
         <p className="text-sm text-brand-muted">
-          Das war&apos;s — kein IT-Projekt, keine Schulung, keine Wartezeit.
+          {UI.howItWorks.bottomLine}
         </p>
       </motion.div>
     </SectionWrapper>

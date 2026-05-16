@@ -3,10 +3,11 @@
 import { motion } from 'framer-motion'
 import SectionWrapper from '@/components/ui/SectionWrapper'
 import { fadeInUp, transition, viewportOptions } from '@/lib/motion'
-import { PRICING, PRICING_EXTRAS } from '@/lib/constants'
+import { useContent } from '@/lib/i18n'
 import { CheckIcon } from '@heroicons/react/24/solid'
 
 export default function PricingSection() {
+  const { PRICING, PRICING_EXTRAS, UI } = useContent()
   return (
     <SectionWrapper className="bg-white" id="pricing">
       {/* Heading */}
@@ -19,14 +20,13 @@ export default function PricingSection() {
         className="text-center mb-12 lg:mb-16 max-w-2xl mx-auto"
       >
         <p className="text-xs font-semibold text-brand-sky uppercase tracking-widest mb-3">
-          Preise & Pakete
+          {UI.pricing.kicker}
         </p>
         <h2 className="text-3xl sm:text-4xl font-bold text-brand-navy leading-tight">
-          Transparent. Monatlich kündbar. Keine Einrichtungsgebühr.
+          {UI.pricing.headline}
         </h2>
         <p className="mt-3 text-brand-slate leading-relaxed">
-          Ein Tarif pro Betrieb — keine versteckten Kosten pro Anfrage, kein Setup-Fee,
-          keine 24-Monatsverträge. Pilot starten, in 14 Tagen entscheiden.
+          {UI.pricing.sub}
         </p>
       </motion.div>
 
@@ -52,7 +52,7 @@ export default function PricingSection() {
             {plan.highlighted && (
               <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-px">
                 <span className="inline-block px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white bg-brand-sky rounded-b-md">
-                  Beliebt
+                  {UI.pricing.popular}
                 </span>
               </div>
             )}

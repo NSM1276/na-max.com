@@ -4,11 +4,12 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import SectionWrapper from '@/components/ui/SectionWrapper'
 import { fadeInUp, transition, viewportOptions } from '@/lib/motion'
-import { FAQ } from '@/lib/constants'
+import { useContent } from '@/lib/i18n'
 import { ChevronDownIcon } from '@heroicons/react/24/outline'
 
 export default function FaqSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0)
+  const { FAQ, UI } = useContent()
 
   return (
     <SectionWrapper className="bg-brand-surface" id="faq">
@@ -21,10 +22,10 @@ export default function FaqSection() {
         className="text-center mb-10 lg:mb-12 max-w-2xl mx-auto"
       >
         <p className="text-xs font-semibold text-brand-sky uppercase tracking-widest mb-3">
-          Häufige Fragen
+          {UI.faq.kicker}
         </p>
         <h2 className="text-3xl sm:text-4xl font-bold text-brand-navy leading-tight">
-          Was Hoteliers vor dem Pilot wissen wollen
+          {UI.faq.headline}
         </h2>
       </motion.div>
 
@@ -86,7 +87,7 @@ export default function FaqSection() {
         transition={{ ...transition, delay: 0.3 }}
         className="mt-8 text-center text-sm text-brand-muted"
       >
-        Weitere Fragen?{' '}
+        {UI.faq.moreQuestions}{' '}
         <a href="mailto:pilot@na-max.com" className="text-brand-sky font-semibold hover:underline">
           pilot@na-max.com
         </a>

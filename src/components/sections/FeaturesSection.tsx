@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import SectionWrapper from '@/components/ui/SectionWrapper'
-import { FEATURES } from '@/lib/constants'
+import { useContent } from '@/lib/i18n'
 import { fadeInUp, transition, viewportOptions } from '@/lib/motion'
 import {
   ShoppingCartIcon,
@@ -23,6 +23,7 @@ const iconMap: Record<string, React.ElementType> = {
 }
 
 export default function FeaturesSection() {
+  const { FEATURES, UI } = useContent()
   return (
     <SectionWrapper id="features">
       <motion.div
@@ -34,10 +35,10 @@ export default function FeaturesSection() {
         className="text-center mb-12"
       >
         <p className="text-xs font-semibold text-brand-sky uppercase tracking-widest mb-3">
-          Funktionen
+          {UI.features.kicker}
         </p>
         <h2 className="text-3xl sm:text-4xl font-bold text-brand-navy text-balance">
-          Was Ihr Hotel gewinnt
+          {UI.features.headline}
         </h2>
       </motion.div>
 

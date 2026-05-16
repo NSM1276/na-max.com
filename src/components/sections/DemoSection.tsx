@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import SectionWrapper from '@/components/ui/SectionWrapper'
 import { fadeInUp, transition, viewportOptions } from '@/lib/motion'
+import { useContent } from '@/lib/i18n'
 
 // ─── Demo default data ────────────────────────────────────────────────────────
 const DEFAULTS = {
@@ -40,17 +41,14 @@ function PhoneMockup({ children }: { children: React.ReactNode }) {
 
 // ─── Guest page preview (inside phone) ───────────────────────────────────────
 function GuestPreview({ data, lang }: { data: DemoData; lang: 'de' | 'en' }) {
-  const t = {
-    wifi:       lang === 'de' ? 'WLAN' : 'WiFi',
-    checkin:    lang === 'de' ? 'Check-in' : 'Check-in',
-    checkout:   lang === 'de' ? 'Check-out' : 'Check-out',
-    breakfast:  lang === 'de' ? 'Frühstück' : 'Breakfast',
-    rules:      lang === 'de' ? 'Hausordnung' : 'House Rules',
-    welcome:    lang === 'de' ? 'Willkommen' : 'Welcome',
-    network:    lang === 'de' ? 'Netzwerk' : 'Network',
-    password:   lang === 'de' ? 'Passwort' : 'Password',
-    from:       lang === 'de' ? 'Von' : 'From',
-    until:      lang === 'de' ? 'Bis' : 'Until',
+  const t = lang === 'de' ? {
+    wifi: 'WLAN', checkin: 'Check-in', checkout: 'Check-out',
+    breakfast: 'Frühstück', rules: 'Hausordnung', welcome: 'Willkommen',
+    network: 'Netzwerk', password: 'Passwort', from: 'Von', until: 'Bis',
+  } : {
+    wifi: 'Wi-Fi', checkin: 'Check-in', checkout: 'Check-out',
+    breakfast: 'Breakfast', rules: 'House Rules', welcome: 'Welcome',
+    network: 'Network', password: 'Password', from: 'From', until: 'Until',
   }
 
   return (
@@ -157,6 +155,7 @@ export default function DemoSection() {
   const [data, setData]   = useState<DemoData>(DEFAULTS)
   const [lang, setLang]   = useState<'de' | 'en'>('de')
   const [tab, setTab]     = useState<'content' | 'preview'>('content')
+  const { UI } = useContent()
 
   function set(key: keyof DemoData) {
     return (v: string) => setData(d => ({ ...d, [key]: v }))
@@ -178,14 +177,13 @@ export default function DemoSection() {
         className="text-center mb-12"
       >
         <p className="text-xs font-semibold text-brand-sky uppercase tracking-widest mb-3">
-          Live Demo
+          {UI.demo.kicker}
         </p>
         <h2 className="text-3xl sm:text-4xl font-bold text-brand-ink mb-4">
-          Probieren Sie es jetzt aus
+          {UI.demo.headline}
         </h2>
         <p className="text-brand-muted max-w-xl mx-auto">
-          Bearbeiten Sie den Inhalt links — die Gäste-Seite aktualisiert sich sofort.
-          So einfach ist Na-Max.
+          {UI.demo.sub}
         </p>
       </motion.div>
 
@@ -204,13 +202,13 @@ export default function DemoSection() {
             onClick={() => setTab('content')}
             className={`flex-1 py-2.5 text-sm font-semibold transition-colors ${tab === 'content' ? 'bg-brand-sky text-white' : 'text-slate-500'}`}
           >
-            ✏️ Bearbeiten
+            {UI.demo.tabEdit}
           </button>
           <button
             onClick={() => setTab('preview')}
             className={`flex-1 py-2.5 text-sm font-semibold transition-colors ${tab === 'preview' ? 'bg-brand-sky text-white' : 'text-slate-500'}`}
           >
-            📱 Vorschau
+            {UI.demo.tabPreview}
           </button>
         </div>
 
@@ -225,39 +223,39 @@ export default function DemoSection() {
                   <div className="w-2 h-2 rounded-full bg-red-400" />
                   <div className="w-2 h-2 rounded-full bg-yellow-400" />
                   <div className="w-2 h-2 rounded-full bg-green-400" />
-                  <span className="ml-2 text-xs font-semibold text-slate-400">Admin-Panel</span>
+                  <span className="ml-2 text-xs font-semibold text-slate-400">{UI.demo.adminPanel}</span>
                 </div>
                 <button
                   onClick={reset}
                   className="text-[10px] text-slate-400 hover:text-brand-sky font-medium transition-colors"
                 >
-                  ↺ Reset
+                  {UI.demo.reset}
                 </button>
               </div>
 
               {/* fields */}
-              <Field label="Name des Objekts" value={data.name} onChange={set('name')} />
-              <Field label="Stadt" value={data.city} onChange={set('city')} />
+              <Field label={UI.demo.fieldName} value={data.name} onChange={set('name')} />
+              <Field label={UI.demo.fieldCity} value={data.city} onChange={set('city')} />
 
               <div className="grid grid-cols-2 gap-3">
-                <Field label="WLAN-Name" value={data.wifi_name} onChange={set('wifi_name')} />
-                <Field label="Passwort" value={data.wifi_pass} onChange={set('wifi_pass')} />
+                <Field label={UI.demo.fieldWifiName} value={data.wifi_name} onChange={set('wifi_name')} />
+                <Field label={UI.demo.fieldWifiPass} value={data.wifi_pass} onChange={set('wifi_pass')} />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
-                <Field label="Check-in" value={data.checkin} onChange={set('checkin')} />
-                <Field label="Check-out" value={data.checkout} onChange={set('checkout')} />
+                <Field label={UI.demo.fieldCheckin} value={data.checkin} onChange={set('checkin')} />
+                <Field label={UI.demo.fieldCheckout} value={data.checkout} onChange={set('checkout')} />
               </div>
 
-              <Field label="Frühstück" value={data.breakfast} onChange={set('breakfast')} multiline />
-              <Field label="Hausordnung" value={data.rules} onChange={set('rules')} multiline />
+              <Field label={UI.demo.fieldBreakfast} value={data.breakfast} onChange={set('breakfast')} multiline />
+              <Field label={UI.demo.fieldRules} value={data.rules} onChange={set('rules')} multiline />
 
               {/* fake save button */}
               <button
                 className="w-full py-2.5 rounded-xl bg-brand-sky text-white text-sm font-semibold hover:opacity-90 transition-opacity"
                 onClick={() => {}} // intentionally no-op
               >
-                ✓ Änderungen gespeichert
+                {UI.demo.saved}
               </button>
             </div>
           </div>
@@ -285,7 +283,7 @@ export default function DemoSection() {
             </PhoneMockup>
 
             <p className="text-[11px] text-slate-400 text-center max-w-[220px]">
-              So sieht Ihr Gast die Seite — in seiner Sprache, direkt nach dem QR-Scan.
+              {UI.demo.previewCaption}
             </p>
           </div>
 

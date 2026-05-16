@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 import SectionWrapper from '@/components/ui/SectionWrapper'
 import { fadeInUp, transition, viewportOptions } from '@/lib/motion'
-import { SECURITY } from '@/lib/constants'
+import { useContent } from '@/lib/i18n'
 import {
   ShieldCheckIcon,
   LockClosedIcon,
@@ -19,6 +19,7 @@ const iconMap: Record<string, React.ElementType> = {
 }
 
 export default function SecuritySection() {
+  const { SECURITY, UI } = useContent()
   return (
     <SectionWrapper className="bg-brand-navy text-white" id="security">
       <motion.div
@@ -30,7 +31,7 @@ export default function SecuritySection() {
         className="text-center mb-12 lg:mb-16 max-w-2xl mx-auto"
       >
         <p className="text-xs font-semibold text-brand-sky uppercase tracking-widest mb-3">
-          Sicherheit & DSGVO
+          {UI.security.kicker}
         </p>
         <h2 className="text-3xl sm:text-4xl font-bold leading-tight">
           {SECURITY.headline}
@@ -74,12 +75,12 @@ export default function SecuritySection() {
       >
         <span className="flex items-center gap-2">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-          Hosted in DE / AT
+          {UI.security.badgeHosted}
         </span>
         <span className="hidden sm:inline opacity-30">·</span>
-        <span>DSGVO Art. 25 — Privacy by Design</span>
+        <span>{UI.security.badgePrivacy}</span>
         <span className="hidden sm:inline opacity-30">·</span>
-        <span>TLS 1.3 verschlüsselt</span>
+        <span>{UI.security.badgeTLS}</span>
       </motion.div>
     </SectionWrapper>
   )

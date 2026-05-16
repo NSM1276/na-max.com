@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import SectionWrapper from '@/components/ui/SectionWrapper'
-import { PROBLEMS } from '@/lib/constants'
+import { useContent } from '@/lib/i18n'
 import { fadeInUp, transition, viewportOptions } from '@/lib/motion'
 import {
   UserGroupIcon,
@@ -19,6 +19,7 @@ const iconMap: Record<string, React.ElementType> = {
 }
 
 export default function ProblemSection() {
+  const { PROBLEMS, UI } = useContent()
   return (
     <SectionWrapper className="bg-brand-surface">
       <motion.div
@@ -30,10 +31,10 @@ export default function ProblemSection() {
         className="text-center mb-12"
       >
         <p className="text-xs font-semibold text-brand-sky uppercase tracking-widest mb-3">
-          Der Alltag im Hotel
+          {UI.problem.kicker}
         </p>
         <h2 className="text-3xl sm:text-4xl font-bold text-brand-navy text-balance">
-          Kennen Sie das?
+          {UI.problem.headline}
         </h2>
       </motion.div>
 

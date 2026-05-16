@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import SectionWrapper from '@/components/ui/SectionWrapper'
 import { fadeInUp, transition, viewportOptions } from '@/lib/motion'
+import { useContent } from '@/lib/i18n'
 
 const placeholderLogos = [
   { name: 'Hotel Sacher', initials: 'HS' },
@@ -12,6 +13,7 @@ const placeholderLogos = [
 ]
 
 export default function TrustSection() {
+  const { UI } = useContent()
   return (
     <SectionWrapper className="border-t border-gray-100">
       <motion.div
@@ -23,7 +25,7 @@ export default function TrustSection() {
         className="text-center mb-10"
       >
         <p className="text-sm text-brand-muted font-medium">
-          Bereits im Einsatz in Pilothotels in Österreich
+          {UI.trust.intro}
         </p>
       </motion.div>
 
@@ -65,16 +67,15 @@ export default function TrustSection() {
         </svg>
 
         <blockquote className="text-lg text-brand-navy font-medium leading-relaxed text-balance italic">
-          &ldquo;Na-Max hat unsere Gästekommunikation komplett verändert. Das Personal
-          spart täglich wertvolle Zeit, und die Gäste bestellen deutlich mehr.&rdquo;
+          {UI.trust.quote}
         </blockquote>
 
         <div className="mt-5 text-sm text-brand-muted">
-          <span className="font-semibold text-brand-slate">Hoteldirektor</span>
+          <span className="font-semibold text-brand-slate">{UI.trust.authorRole}</span>
           {' · '}
-          <span>Wien, Österreich</span>
+          <span>{UI.trust.authorLocation}</span>
           {' · '}
-          <span className="italic">Pilot-Teilnehmer (Name auf Anfrage)</span>
+          <span className="italic">{UI.trust.authorNote}</span>
         </div>
       </motion.div>
     </SectionWrapper>

@@ -4,21 +4,8 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import SectionWrapper from '@/components/ui/SectionWrapper'
 import { fadeInUp, transition, viewportOptions } from '@/lib/motion'
+import { useContent } from '@/lib/i18n'
 import { CheckCircleIcon, ExclamationCircleIcon } from '@heroicons/react/24/solid'
-
-// ─── Options ──────────────────────────────────────────────────────────────────
-
-const PROPERTY_TYPES = ['Hotel', 'Pension / B&B', 'Apartment', 'Hostel', 'Anderes']
-const ROOM_COUNTS    = ['1 – 5 Zimmer', '6 – 15 Zimmer', '16 – 30 Zimmer', '30+ Zimmer']
-const GUEST_MIXES    = [
-  'Meist deutschsprachig',
-  'International gemischt',
-  'Meist englischsprachig',
-  'Viele Asiaten / Russen',
-]
-const CITIES = ['Wien', 'Graz', 'Salzburg', 'Berlin', 'München', 'Andere Stadt']
-
-const STEPS_LABELS = ['IHR OBJEKT', 'IHRE GÄSTE', 'KONTAKT']
 
 // ─── State ────────────────────────────────────────────────────────────────────
 
@@ -40,10 +27,10 @@ const INIT: State = {
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
-function StepIndicator({ current }: { current: number }) {
+function StepIndicator({ current, labels }: { current: number; labels: string[] }) {
   return (
     <div className="flex items-center gap-0 mb-8">
-      {STEPS_LABELS.map((label, i) => {
+      {labels.map((label, i) => {
         const done    = i < current
         const active  = i === current
         return (
@@ -62,7 +49,7 @@ function StepIndicator({ current }: { current: number }) {
                 {label}
               </span>
             </div>
-            {i < STEPS_LABELS.length - 1 && (
+            {i < labels.length - 1 && (
               <div className={`flex-1 h-px mx-3 ${done ? 'bg-brand-sky' : 'bg-slate-200'}`} />
             )}
           </div>
@@ -108,6 +95,7 @@ function Label({ children }: { children: React.ReactNode }) {
 export default function RegistrationFunnelSection() {
   const [s, setS]         = useState<State>(INIT)
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
+  const { UI } = useContent()
 
   const set = (key: keyof State, value: string | number) =>
     setS(prev => ({ ...prev, [key]: value }))
@@ -126,13 +114,13 @@ export default function RegistrationFunnelSection() {
     fd.append('_captcha',  'false')
     fd.append('_template', 'table')
     fd.append('_subject',  `Na-Max Anfrage — ${s.hotelName} · ${s.city}`)
-    fd.append('Art des Objekts',   s.propertyType)
-    fd.append('Anzahl Zimmer',     s.rooms)
-    fd.append('Gäste-Mix',         s.guestMix)
-    fd.append('Stadt',             s.city)
-    fd.append('Name des Objekts',  s.hotelName)
-    fd.append('E-Mail',            s.email)
-    if (s.phone) fd.append('Telefon', s.phone)
+    fd.append('Property type',   s.propertyType)
+    fd.append('Rooms',           s.rooms)
+    fd.append('Guest mix',       s.guestMix)
+    fd.append('City',            s.city)
+    fd.append('Property name',   s.hotelName)
+    fd.append('Email',           s.email)
+    if (s.phone) fd.append('Phone', s.phone)
 
     try {
       const res = await fetch('https://formsubmit.co/ajax/pilot@na-max.com', {
@@ -160,13 +148,13 @@ export default function RegistrationFunnelSection() {
         {/* Header */}
         <div className="text-center mb-10">
           <p className="text-xs font-semibold text-brand-sky uppercase tracking-widest mb-3">
-            14-Tage Pilot
+            {UI.funnel.kicker}
           </p>
           <h2 className="text-3xl sm:text-4xl font-bold text-brand-navy leading-tight">
-            Jetzt kostenlos starten
+            {UI.funnel.headline}
           </h2>
           <p className="mt-3 text-brand-slate text-sm">
-            Wir melden uns innerhalb eines Werktages und richten alles ein.
+            {UI.funnel.sub}
           </p>
         </div>
 
@@ -176,19 +164,19 @@ export default function RegistrationFunnelSection() {
             <SuccessState hotelName={s.hotelName} onReset={() => { setS(INIT); setStatus('idle') }} />
           ) : (
             <form onSubmit={handleSubmit}>
-              <StepIndicator current={s.step} />
+              <StepIndicator current={s.step} labels={UI.funnel.steps} />
 
               {/* Step 0 */}
               {s.step === 0 && (
                 <div className="space-y-6">
                   <div>
-                    <Label>Art des Objekts</Label>
-                    <ChipGroup options={PROPERTY_TYPES} value={s.propertyType}
+                    <Label>{UI.funnel.labelType}</Label>
+                    <ChipGroup options={UI.funnel.propertyTypes} value={s.propertyType}
                       onChange={v => set('propertyType', v)} />
                   </div>
                   <div>
-                    <Label>Anzahl der Zimmer</Label>
-                    <ChipGroup options={ROOM_COUNTS} value={s.rooms}
+                    <Label>{UI.funnel.labelRooms}</Label>
+                    <ChipGroup options={UI.funnel.roomCounts} value={s.rooms}
                       onChange={v => set('rooms', v)} />
                   </div>
                 </div>
@@ -198,13 +186,13 @@ export default function RegistrationFunnelSection() {
               {s.step === 1 && (
                 <div className="space-y-6">
                   <div>
-                    <Label>Woher kommen Ihre Gäste?</Label>
-                    <ChipGroup options={GUEST_MIXES} value={s.guestMix}
+                    <Label>{UI.funnel.labelGuests}</Label>
+                    <ChipGroup options={UI.funnel.guestMixes} value={s.guestMix}
                       onChange={v => set('guestMix', v)} />
                   </div>
                   <div>
-                    <Label>Ihre Stadt</Label>
-                    <ChipGroup options={CITIES} value={s.city}
+                    <Label>{UI.funnel.labelCity}</Label>
+                    <ChipGroup options={UI.funnel.cities} value={s.city}
                       onChange={v => set('city', v)} />
                   </div>
                 </div>
@@ -215,40 +203,40 @@ export default function RegistrationFunnelSection() {
                 <div className="space-y-4">
                   <div>
                     <label className="text-[11px] font-semibold text-slate-400 uppercase tracking-widest mb-1.5 block">
-                      Name des Hotels / Pension <span className="text-red-400">*</span>
+                      {UI.funnel.labelHotelName} <span className="text-red-400">*</span>
                     </label>
                     <input
                       type="text"
                       value={s.hotelName}
                       onChange={e => set('hotelName', e.target.value)}
-                      placeholder="z.B. Pension Schönbrunn"
+                      placeholder={UI.funnel.hotelPlaceholder}
                       className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm
                                  focus:outline-none focus:ring-2 focus:ring-brand-sky/40 focus:border-brand-sky"
                     />
                   </div>
                   <div>
                     <label className="text-[11px] font-semibold text-slate-400 uppercase tracking-widest mb-1.5 block">
-                      Ihre E-Mail <span className="text-red-400">*</span>
+                      {UI.funnel.labelEmail} <span className="text-red-400">*</span>
                     </label>
                     <input
                       type="email"
                       value={s.email}
                       onChange={e => set('email', e.target.value)}
-                      placeholder="ihre@email.at"
+                      placeholder={UI.funnel.emailPlaceholder}
                       className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm
                                  focus:outline-none focus:ring-2 focus:ring-brand-sky/40 focus:border-brand-sky"
                     />
                   </div>
                   <div>
                     <label className="flex justify-between text-[11px] font-semibold text-slate-400 uppercase tracking-widest mb-1.5">
-                      <span>Telefon</span>
-                      <span className="normal-case font-normal">Optional</span>
+                      <span>{UI.funnel.labelPhone}</span>
+                      <span className="normal-case font-normal">{UI.funnel.optional}</span>
                     </label>
                     <input
                       type="tel"
                       value={s.phone}
                       onChange={e => set('phone', e.target.value)}
-                      placeholder="+43 …"
+                      placeholder={UI.funnel.phonePlaceholder}
                       className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm
                                  focus:outline-none focus:ring-2 focus:ring-brand-sky/40 focus:border-brand-sky"
                     />
@@ -257,7 +245,7 @@ export default function RegistrationFunnelSection() {
                   {status === 'error' && (
                     <div className="flex items-center gap-2 px-3 py-2.5 rounded-lg bg-red-50 border border-red-100 text-sm text-red-700">
                       <ExclamationCircleIcon className="w-5 h-5 flex-shrink-0" />
-                      Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.
+                      {UI.funnel.errorMsg}
                     </div>
                   )}
                 </div>
@@ -271,7 +259,7 @@ export default function RegistrationFunnelSection() {
                     onClick={() => set('step', s.step - 1)}
                     className="px-5 py-2.5 rounded-xl border border-slate-200 text-sm text-brand-slate hover:border-slate-300 transition-colors"
                   >
-                    ← Zurück
+                    {UI.funnel.back}
                   </button>
                 )}
                 {s.step < 2 ? (
@@ -283,7 +271,7 @@ export default function RegistrationFunnelSection() {
                                shadow-cta hover:bg-brand-sky-dark transition-all
                                disabled:opacity-40 disabled:cursor-not-allowed"
                   >
-                    Weiter →
+                    {UI.funnel.next}
                   </button>
                 ) : (
                   <button
@@ -293,13 +281,13 @@ export default function RegistrationFunnelSection() {
                                shadow-cta hover:bg-brand-sky-dark transition-all
                                disabled:opacity-40 disabled:cursor-not-allowed"
                   >
-                    {status === 'sending' ? 'Wird gesendet…' : 'Kostenlos anfragen →'}
+                    {status === 'sending' ? UI.funnel.sending : UI.funnel.submit}
                   </button>
                 )}
               </div>
 
               <p className="mt-4 text-[11px] text-brand-muted text-center">
-                Keine Kreditkarte · Kein Vertrag · Jederzeit kündbar
+                {UI.funnel.legalLine}
               </p>
             </form>
           )}
@@ -310,21 +298,21 @@ export default function RegistrationFunnelSection() {
 }
 
 function SuccessState({ hotelName, onReset }: { hotelName: string; onReset: () => void }) {
+  const { UI } = useContent()
   return (
     <div className="text-center py-6">
       <div className="w-14 h-14 mx-auto rounded-2xl bg-emerald-50 flex items-center justify-center mb-4">
         <CheckCircleIcon className="w-8 h-8 text-emerald-500" />
       </div>
-      <h3 className="text-xl font-bold text-brand-navy">Vielen Dank!</h3>
+      <h3 className="text-xl font-bold text-brand-navy">{UI.funnel.successTitle}</h3>
       <p className="mt-2 text-sm text-brand-slate max-w-sm mx-auto leading-relaxed">
-        Ihre Anfrage für <strong>{hotelName}</strong> ist angekommen.
-        Wir melden uns innerhalb von 24 Stunden — meistens schneller.
+        {UI.funnel.successMsg1} <strong>{hotelName}</strong> {UI.funnel.successMsg2}
       </p>
       <button
         onClick={onReset}
         className="mt-5 text-sm text-brand-sky font-semibold hover:underline"
       >
-        Weiteres Objekt anmelden
+        {UI.funnel.successReset}
       </button>
     </div>
   )

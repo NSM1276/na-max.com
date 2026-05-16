@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import dynamic from 'next/dynamic'
 import Button from '@/components/ui/Button'
 import { fadeInUp, transition } from '@/lib/motion'
-import { HERO } from '@/lib/constants'
+import { useContent } from '@/lib/i18n'
 
 // 15-секундная hero-анимация. SSR=false — внутри используются
 // requestAnimationFrame / ResizeObserver, server-rendering невозможен.
@@ -20,6 +20,7 @@ const NaMaxHero = dynamic(() => import('@/components/hero/NaMaxVideo'), {
 })
 
 export default function HeroSection() {
+  const { HERO, UI } = useContent()
   return (
     <section className="relative min-h-screen bg-hero-radial flex items-center pt-16 pb-12 overflow-hidden">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
@@ -69,10 +70,10 @@ export default function HeroSection() {
               className="flex flex-col sm:flex-row items-start gap-3"
             >
               <Button href="#pilot" size="lg">
-                14-Tage Pilot starten
+                {UI.hero.ctaPrimary}
               </Button>
               <Button href="#how-it-works" variant="ghost" size="lg">
-                So funktioniert&apos;s
+                {UI.hero.ctaSecondary}
               </Button>
             </motion.div>
 
@@ -119,7 +120,7 @@ export default function HeroSection() {
               />
             ))}
           </div>
-          <span>Bereits in Pilothotels in Österreich im Einsatz</span>
+          <span>{UI.hero.socialProof}</span>
         </motion.div>
       </div>
     </section>

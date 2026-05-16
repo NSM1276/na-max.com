@@ -1,15 +1,15 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useContent } from '@/lib/i18n'
 
-const PHONE = '4367764292055' // международный формат без +
-const MESSAGE = encodeURIComponent('Hallo, ich interessiere mich für Na-Max für mein Hotel/meine Pension.')
-const WA_URL = `https://wa.me/${PHONE}?text=${MESSAGE}`
+const PHONE = '4367764292055' // international format, no +
 
 export default function WhatsAppButton() {
   const [visible, setVisible] = useState(false)
+  const { UI } = useContent()
 
-  // Появляется через 3 секунды — не мешает первому взгляду на сайт
+  // Appears after 3 seconds so it doesn't disturb the first impression
   useEffect(() => {
     const t = setTimeout(() => setVisible(true), 3000)
     return () => clearTimeout(t)
@@ -17,12 +17,14 @@ export default function WhatsAppButton() {
 
   if (!visible) return null
 
+  const waUrl = `https://wa.me/${PHONE}?text=${encodeURIComponent(UI.whatsapp.message)}`
+
   return (
     <a
-      href={WA_URL}
+      href={waUrl}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="WhatsApp kontaktieren"
+      aria-label={UI.whatsapp.aria}
       className="fixed bottom-24 right-5 z-40 group"
       style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
@@ -40,7 +42,7 @@ export default function WhatsAppButton() {
 
       {/* Tooltip */}
       <span className="absolute right-16 top-1/2 -translate-y-1/2 whitespace-nowrap bg-brand-ink text-white text-xs font-medium px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none shadow-md">
-        Jetzt auf WhatsApp schreiben
+        {UI.whatsapp.tooltip}
         <span className="absolute right-[-5px] top-1/2 -translate-y-1/2 border-4 border-transparent border-l-brand-ink" />
       </span>
     </a>

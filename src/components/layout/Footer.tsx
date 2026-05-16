@@ -1,13 +1,14 @@
 'use client'
 
 import { useState } from 'react'
-import { SITE } from '@/lib/constants'
+import { useContent } from '@/lib/i18n'
 import LegalModal from './LegalModal'
 
 type ModalType = 'impressum' | 'datenschutz' | null
 
 export default function Footer() {
   const [modal, setModal] = useState<ModalType>(null)
+  const { SITE, UI } = useContent()
 
   return (
     <>
@@ -21,37 +22,37 @@ export default function Footer() {
 
             <nav className="flex items-center gap-6 text-sm text-white/60">
               <a href="#how-it-works" className="hover:text-white transition-colors">
-                So funktioniert&apos;s
+                {UI.footer.howItWorks}
               </a>
               <a href="#features" className="hover:text-white transition-colors">
-                Funktionen
+                {UI.footer.features}
               </a>
               <a href="#pilot" className="hover:text-white transition-colors">
-                Pilot starten
+                {UI.footer.pilot}
               </a>
               <a href={`mailto:${SITE.email}`} className="hover:text-white transition-colors">
-                Kontakt
+                {UI.footer.contact}
               </a>
             </nav>
           </div>
 
           <div className="mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/40">
-            <span>© {new Date().getFullYear()} {SITE.name}. Alle Rechte vorbehalten.</span>
+            <span>© {new Date().getFullYear()} {SITE.name}. {UI.footer.rights}</span>
 
             <div className="flex items-center gap-4">
-              <span>DSGVO-konform · Daten auf EU-Servern</span>
+              <span>{UI.footer.gdprLine}</span>
               <span className="text-white/20">|</span>
               <button
                 onClick={() => setModal('impressum')}
                 className="hover:text-white/80 transition-colors underline-offset-2 hover:underline"
               >
-                Impressum
+                {UI.footer.impressum}
               </button>
               <button
                 onClick={() => setModal('datenschutz')}
                 className="hover:text-white/80 transition-colors underline-offset-2 hover:underline"
               >
-                Datenschutz
+                {UI.footer.privacy}
               </button>
             </div>
           </div>

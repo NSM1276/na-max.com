@@ -1,10 +1,12 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { useContent } from '@/lib/i18n'
 
 export default function MobileStickyCtaBar() {
   const [visible, setVisible] = useState(true)
   const observerRef = useRef<IntersectionObserver | null>(null)
+  const { UI } = useContent()
 
   useEffect(() => {
     const target = document.getElementById('final-cta')
@@ -27,7 +29,7 @@ export default function MobileStickyCtaBar() {
         href="#pilot"
         className="block w-full text-center px-6 py-3.5 rounded-xl bg-brand-sky text-white font-semibold text-base shadow-cta hover:bg-brand-sky-dark transition-all duration-200"
       >
-        14-Tage Pilot starten
+        {UI.mobileCta.label}
       </a>
     </div>
   )
